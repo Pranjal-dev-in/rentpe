@@ -1,0 +1,782 @@
+<% layout("layout/boilerplate") %>
+
+<!-- PAGE HERO -->
+<div class="cl-hero">
+  <div class="cl-hero-inner">
+    <div class="auth-eyebrow" style="margin-bottom: 18px">
+      <div class="eyebrow-dot"></div>
+      Host on RentPe
+    </div>
+    <h1 class="cl-hero-title">
+      List your <span class="accent">property</span>
+    </h1>
+    <p class="cl-hero-sub">
+      Fill in your details below. It takes less than 5 minutes to publish your
+      listing and start receiving bookings.
+    </p>
+    <!-- STEP INDICATOR -->
+    <div class="cl-steps">
+      <div class="cl-step active" data-step="1">
+        <div class="cl-step-num">1</div>
+        <div class="cl-step-label">Basics</div>
+      </div>
+      <div class="cl-step-line"></div>
+      <div class="cl-step" data-step="2">
+        <div class="cl-step-num">2</div>
+        <div class="cl-step-label">Details</div>
+      </div>
+      <div class="cl-step-line"></div>
+      <div class="cl-step" data-step="3">
+        <div class="cl-step-num">3</div>
+        <div class="cl-step-label">Photos</div>
+      </div>
+      <div class="cl-step-line"></div>
+      <div class="cl-step" data-step="4">
+        <div class="cl-step-num">4</div>
+        <div class="cl-step-label">Publish</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="cl-body">
+  <div class="cl-layout">
+    <!-- FORM COLUMN -->
+    <div class="cl-form-col">
+      <form
+        action="/listing"
+        method="post"
+        id="listingForm"
+        enctype="multipart/form-data"
+        novalidate
+      >
+        <!-- ── STEP 1: BASICS ── -->
+        <div class="cl-section" id="step1">
+          <div class="cl-section-head">
+            <div class="cl-section-num">01</div>
+            <div>
+              <h2 class="cl-section-title">Basic Information</h2>
+              <p class="cl-section-desc">
+                Tell guests what makes your place special.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title"
+              >Listing title <span class="req">*</span></label
+            >
+            <div class="input-wrap">
+              <svg
+                class="input-icon"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+              <input
+                class="form-input"
+                type="text"
+                id="title"
+                name="title"
+                placeholder="e.g. Sparsh Hotel & Resort — Bareilly"
+                required
+                maxlength="80"
+                oninput="charCount(this, 'titleCount', 80)"
+              />
+            </div>
+            <div class="input-footer-row">
+              <div class="form-error" id="titleError">Title is required.</div>
+              <span class="char-count"><span id="titleCount">0</span>/80</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label descri" for="description"
+              >Description <span class="req">*</span></label
+            >
+            <textarea
+              class="form-input form-textarea"
+              id="description"
+              name="description"
+              rows="5"
+              placeholder="Describe your property — amenities, location highlights, what makes it unique…"
+              required
+              maxlength="500"
+              oninput="charCount(this, 'descCount', 500)"
+            ></textarea>
+            <div class="input-footer-row">
+              <div class="form-error" id="descriptionError">
+                Description is required.
+              </div>
+              <span class="char-count"><span id="descCount">0</span>/500</span>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="type"
+                >Property type <span class="req">*</span></label
+              >
+              <div class="input-wrap select-wrap">
+                <svg
+                  class="input-icon"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                </svg>
+                <select
+                  class="form-input form-select"
+                  id="type"
+                  name="type"
+                  required
+                >
+                  <option value="" disabled selected>Select type</option>
+                  <option>Hotel</option>
+                  <option>Guest House</option>
+                  <option>Resort</option>
+                  <option>Homestay</option>
+                  <option>Apartment</option>
+                  <option>Villa</option>
+                  <option>Hostel</option>
+                </select>
+              </div>
+              <div class="form-error" id="typeError">
+                Select a property type.
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="guests"
+                >Max guests <span class="req">*</span></label
+              >
+              <div class="input-wrap">
+                <svg
+                  class="input-icon"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <input
+                  class="form-input"
+                  type="number"
+                  id="guests"
+                  name="guests"
+                  placeholder="4"
+                  min="1"
+                  max="50"
+                  required
+                />
+              </div>
+              <div class="form-error" id="guestsError">
+                Enter max guest count.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 2: DETAILS ── -->
+        <div class="cl-section" id="step2">
+          <div class="cl-section-head">
+            <div class="cl-section-num">02</div>
+            <div>
+              <h2 class="cl-section-title">Location & Pricing</h2>
+              <p class="cl-section-desc">
+                Help guests find and book your place.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="location"
+              >Street address / Area <span class="req">*</span></label
+            >
+            <div class="input-wrap">
+              <svg
+                class="input-icon"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <input
+                class="form-input"
+                type="text"
+                id="location"
+                name="location"
+                placeholder="e.g. Near Staylight Bus Stand, Bareilly"
+                required
+              />
+            </div>
+            <div class="form-error" id="locationError">
+              Location is required.
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="city"
+                >City <span class="req">*</span></label
+              >
+              <div class="input-wrap">
+                <svg
+                  class="input-icon"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="city"
+                  name="city"
+                  placeholder="Bareilly"
+                  required
+                />
+              </div>
+              <div class="form-error" id="cityError">City is required.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="country"
+                >Country <span class="req">*</span></label
+              >
+              <div class="input-wrap select-wrap">
+                <svg
+                  class="input-icon"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path
+                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                  />
+                </svg>
+                <select
+                  class="form-input form-select"
+                  id="country"
+                  name="country"
+                  required
+                >
+                  <option value="" disabled selected>Select country</option>
+                  <option selected>India</option>
+                  <option>Nepal</option>
+                  <option>Sri Lanka</option>
+                  <option>Bangladesh</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-error" id="countryError">
+                Country is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label" for="price"
+                >Price per night (₹) <span class="req">*</span></label
+              >
+              <div class="input-wrap">
+                <span class="input-icon-text">₹</span>
+                <input
+                  class="form-input input-prefix"
+                  type="number"
+                  id="price"
+                  name="price"
+                  placeholder="1369"
+                  min="100"
+                  required
+                />
+              </div>
+              <div class="form-error" id="priceError">
+                Enter a valid price (min ₹100).
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pincode">PIN code</label>
+              <div class="input-wrap">
+                <svg
+                  class="input-icon"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <rect x="5" y="2" width="14" height="20" rx="2" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" />
+                </svg>
+                <input
+                  class="form-input"
+                  type="text"
+                  id="pincode"
+                  name="pincode"
+                  placeholder="243005"
+                  maxlength="6"
+                  pattern="\d{6}"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 3: AMENITIES ── -->
+        <div class="cl-section" id="step3">
+          <div class="cl-section-head">
+            <div class="cl-section-num">03</div>
+            <div>
+              <h2 class="cl-section-title">Amenities & Photo</h2>
+              <p class="cl-section-desc">
+                Select what your property offers and add a cover photo.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">What this place offers</label>
+            <div class="amenity-picker">
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Sea View"
+                /><span>🌊 Sea View</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Private Pool"
+                /><span>🏊 Private Pool</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Free WiFi"
+                  checked
+                /><span>📶 Free WiFi</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Parking"
+                  checked
+                /><span>🚗 Parking</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Air Conditioning"
+                  checked
+                /><span>❄️ Air Conditioning</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Restaurant"
+                /><span>🍽️ Restaurant</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Room Service"
+                /><span>🛎️ Room Service</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Fitness Center"
+                /><span>💪 Fitness Center</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Breakfast"
+                /><span>🍳 Breakfast</span></label
+              >
+              <label class="amenity-chip-pick"
+                ><input type="checkbox" name="amenities" value="Spa" /><span
+                  >💆 Spa</span
+                ></label
+              >
+              <label class="amenity-chip-pick"
+                ><input type="checkbox" name="amenities" value="Bar" /><span
+                  >🍸 Bar</span
+                ></label
+              >
+              <label class="amenity-chip-pick"
+                ><input
+                  type="checkbox"
+                  name="amenities"
+                  value="Pet Friendly"
+                /><span>🐾 Pet Friendly</span></label
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="image"
+              >Cover photo <span class="req">*</span></label
+            >
+            <div
+              class="upload-zone"
+              id="uploadZone"
+              onclick="document.getElementById('image').click()"
+            >
+              <div class="upload-zone-inner" id="uploadInner">
+                <div class="upload-icon">📸</div>
+                <div class="upload-title">Click to upload or drag & drop</div>
+                <div class="upload-sub">JPG, PNG, WEBP · Max 10 MB</div>
+              </div>
+              <img
+                class="upload-preview"
+                id="uploadPreview"
+                src=""
+                alt="Preview"
+                style="display: none"
+              />
+            </div>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              required
+              multiple
+              style="display: none"
+              onchange="previewImg(this)"
+            />
+            <div class="form-error" id="imageError">
+              Please upload a cover photo.
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STEP 4: PUBLISH ── -->
+        <div class="cl-section" id="step4">
+          <div class="cl-section-head">
+            <div class="cl-section-num">04</div>
+            <div>
+              <h2 class="cl-section-title">Review & Publish</h2>
+              <p class="cl-section-desc">
+                Check your listing details before going live.
+              </p>
+            </div>
+          </div>
+
+          <div class="cl-preview-card" id="previewCard">
+            <div class="cl-preview-img-wrap">
+              <img
+                id="previewImgCard"
+                src=""
+                alt="Preview"
+                style="display: none"
+              />
+              <div class="cl-preview-img-placeholder" id="previewPlaceholder">
+                🏨 Your cover photo
+              </div>
+              <div class="cl-preview-price" id="previewPrice">₹ —</div>
+            </div>
+            <div class="cl-preview-body">
+              <div class="cl-preview-name" id="previewName">
+                Your listing title
+              </div>
+              <div class="cl-preview-location" id="previewLocation">
+                📍 Location, City
+              </div>
+              <div class="cl-preview-tags" id="previewTags"></div>
+            </div>
+          </div>
+
+          <div class="cl-terms-check">
+            <label class="check-label">
+              <input
+                type="checkbox"
+                class="check-input"
+                id="publishTerms"
+                required
+              />
+              <span class="check-box"></span>
+              I confirm all details are accurate and I agree to RentPe's
+              <a href="#" class="auth-link">Host Terms</a>.
+            </label>
+            <div class="form-error" id="termsError">
+              Please accept the host terms.
+            </div>
+          </div>
+
+          <div class="cl-form-actions">
+            <button
+              type="button"
+              class="btn-ghost cl-btn-back"
+              onclick="history.back()"
+            >
+              ← Go back
+            </button>
+            <button type="submit" class="btn-auth cl-btn-submit">
+              <span class="btn-auth-text">🚀 Publish Listing</span>
+              <svg
+                class="btn-auth-arrow"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="cl-sidebar">
+      <div class="cl-sidebar-card sticky-card">
+        <div class="cl-sidebar-title">💡 Tips for a great listing</div>
+        <ul class="cl-tips">
+          <li class="cl-tip">
+            <span class="cl-tip-icon">📸</span
+            ><span
+              >Use bright, high-quality photos — listings with 5+ photos get 3×
+              more bookings</span
+            >
+          </li>
+          <li class="cl-tip">
+            <span class="cl-tip-icon">✍️</span
+            ><span
+              >Write a detailed description — guests book what they can clearly
+              picture</span
+            >
+          </li>
+          <li class="cl-tip">
+            <span class="cl-tip-icon">💰</span
+            ><span
+              >Price competitively — check nearby listings to stay
+              attractive</span
+            >
+          </li>
+          <li class="cl-tip">
+            <span class="cl-tip-icon">⚡</span
+            ><span
+              >Enable instant booking to get more reservations without
+              back-and-forth</span
+            >
+          </li>
+          <li class="cl-tip">
+            <span class="cl-tip-icon">📶</span
+            ><span
+              >List all amenities — WiFi, parking, AC are the top filters guests
+              use</span
+            >
+          </li>
+        </ul>
+
+        <div class="cl-sidebar-divider"></div>
+
+        <div class="cl-sidebar-cta">
+          <div class="cl-sidebar-cta-icon">🏆</div>
+          <div class="cl-sidebar-cta-title">Become a Superhost</div>
+          <div class="cl-sidebar-cta-desc">
+            Maintain a 4.8+ rating with a 90%+ response rate and unlock
+            Superhost perks.
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-card">
+    <div class="modal-icon">🎉</div>
+    <h2 class="modal-title">Listing Published!</h2>
+    <p class="modal-desc">
+      Your property is now live on RentPe. Guests can start booking right away.
+    </p>
+    <a
+      href="index.html"
+      class="btn-auth"
+      style="display: inline-flex; justify-content: center"
+      >View Listings</a
+    >
+  </div>
+</div>
+
+<script>
+  /* Live preview update */
+  function updatePreview() {
+    const t = document.getElementById("title").value;
+    const l = document.getElementById("location").value;
+    const ct = document.getElementById("city").value;
+    const p = document.getElementById("price").value;
+    document.getElementById("previewName").textContent =
+      t || "Your listing title";
+    document.getElementById("previewLocation").textContent =
+      "📍 " + (l ? l + (ct ? ", " + ct : "") : "Location, City");
+    document.getElementById("previewPrice").textContent = p
+      ? "₹ " + Number(p).toLocaleString("en-IN")
+      : "₹ —";
+  }
+  ["title", "location", "city", "price"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", updatePreview);
+  });
+  document.querySelectorAll(".amenity-chip-pick input").forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const checked = [
+        ...document.querySelectorAll(".amenity-chip-pick input:checked"),
+      ].map((x) => x.nextElementSibling.textContent);
+      document.getElementById("previewTags").textContent = checked
+        .slice(0, 4)
+        .join("  ");
+    });
+  });
+
+  function previewImg(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById("uploadPreview").src = e.target.result;
+      document.getElementById("uploadPreview").style.display = "block";
+      document.getElementById("uploadInner").style.display = "none";
+      document.getElementById("previewImgCard").src = e.target.result;
+      document.getElementById("previewImgCard").style.display = "block";
+      document.getElementById("previewPlaceholder").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* Drag & drop */
+  const zone = document.getElementById("uploadZone");
+  zone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    zone.classList.add("drag-over");
+  });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      document.getElementById("image").files = dt.files;
+      previewImg(document.getElementById("image"));
+    }
+  });
+
+  /* Char count */
+  function charCount(el, countId, max) {
+    document.getElementById(countId).textContent = el.value.length;
+  }
+
+  /* Step highlight on scroll */
+  const sections = ["step1", "step2", "step3", "step4"];
+  const stepEls = document.querySelectorAll(".cl-step");
+  window.addEventListener("scroll", () => {
+    let current = 0;
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.6)
+        current = i;
+    });
+    stepEls.forEach((s, i) => s.classList.toggle("active", i === current));
+  });
+
+  /* Submit */
+  let form = document.getElementById("listingForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let valid = true;
+    const required = [
+      "title",
+      "description",
+      "type",
+      "guests",
+      "location",
+      "city",
+      "country",
+      "price",
+    ];
+    required.forEach((id) => {
+      const el = document.getElementById(id);
+      const er = document.getElementById(id + "Error");
+      if (er) er.classList.remove("show");
+      if (el) el.classList.remove("input-error");
+      if (el && !el.value.trim()) {
+        if (er) er.classList.add("show");
+        el.classList.add("input-error");
+        valid = false;
+      }
+    });
+    const imageInput = document.getElementById("image");
+    const imageError = document.getElementById("imageError");
+    imageError.classList.remove("show");
+    if (imageInput.files.length < 3) {
+      imageError.textContent = "Please upload at least 3 images";
+      imageError.classList.add("show");
+      valid = false;
+    }
+    if (!document.getElementById("image").files.length) {
+      document.getElementById("imageError").classList.add("show");
+      valid = false;
+    }
+    if (!document.getElementById("publishTerms").checked) {
+      document.getElementById("termsError").classList.add("show");
+      valid = false;
+    }
+    if (valid) {
+      const btn = this.querySelector(".btn-auth");
+      btn.classList.add("loading");
+      btn.querySelector(".btn-auth-text").textContent = "Publishing…";
+      form.submit();
+    }
+  });
+</script>

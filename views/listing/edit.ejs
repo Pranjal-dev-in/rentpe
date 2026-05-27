@@ -1,0 +1,105 @@
+<% layout("layout/boilerplate") %>
+
+<!-- FORM CONTAINER -->
+
+<div class="container py-5">
+  <div class="form-box mx-auto">
+    <h2 class="mb-4">Edit Your Listing</h2>
+
+    <form
+      action="/listing/<%=list._id%>?_method=PUT"
+      method="post"
+      class="needs-validation"
+      novalidate
+      enctype="multipart/form-data"
+    >
+      <div class="mb-4">
+        <label class="form-label">Property Title *</label>
+        <input
+          class="form-control custom-input"
+          placeholder="Luxury Beach Villa"
+          required
+          name="title"
+          type="text"
+          value="<%=list.title%>"
+        />
+        <div class="invalid-feedback">Please enter a title.</div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Price *</label>
+          <input
+            class="form-control custom-input"
+            placeholder="12000"
+            required
+            name="price"
+            type="number"
+            min="0"
+            value="<%=list.price%>"
+          />
+          <div class="invalid-feedback">Please give some price.</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Location *</label>
+          <input
+            class="form-control custom-input"
+            placeholder="Goa"
+            type="text"
+            required
+            name="location"
+            value="<%=list.location%>"
+          />
+          <div class="invalid-feedback">Please enter a location.</div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Country *</label>
+        <input
+          class="form-control custom-input"
+          placeholder="India"
+          type="text"
+          required
+          name="country"
+          value="<%=list.country%>"
+        />
+        <div class="invalid-feedback">Please enter country name.</div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Image URL</label>
+        <input
+          class="form-control custom-input"
+          placeholder="Paste image URL"
+          name="image"
+          type="file"
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Description</label>
+        <textarea
+          class="form-control custom-input area"
+          placeholder="Describe your property"
+          required
+          name="description"
+        >
+<%=list.description%></textarea
+        >
+        <div class="invalid-feedback">
+          Please tell something about your property.
+        </div>
+      </div>
+
+      <div class="d-flex gap-3">
+        <button class="btn btn-main rounded-pill px-4" type="submit">
+          Make Changes
+        </button>
+        <a href="/listing" class="btn btn-outline-secondary rounded-pill px-4"
+          >Cancel</a
+        >
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(255, 255, 255, 0.55);
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-logo {
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--gold);
+}
+.footer-copy {
+  font-size: 13px;
+}
+.footer-tag {
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════
+   TABLET  768px–1024px
+═══════════════════════════════ */
+@media (max-width: 1024px) {
+  footer {
+    padding: 24px 28px;
+  }
+}
+
+/* ═══════════════════════════════
+   MOBILE  ≤767px
+═══════════════════════════════ */
+@media (max-width: 767px) {
+  footer {
+    padding: 20px 18px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .footer-copy,
+  .footer-tag {
+    font-size: 12px;
+  }
+}

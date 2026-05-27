@@ -1,0 +1,697 @@
+<% layout("layout/boilerplate")%>
+
+<% if(success && success.length > 0) { %>
+  <div class="action-toast-msg success">
+    <i class="fa-solid fa-circle-check action-toast-tick-icon"></i> &nbsp;&nbsp;<span><%= success %></span>
+  </div>
+<% } %>
+
+<!-- ── BREADCRUMB ── -->
+<div class="breadcrumb">
+  <a href="/listing">Home</a>
+  <span>›</span>
+  <!-- <a href="#">Bareilly</a>
+  <span>›</span> -->
+  <span style="color: var(--ink-mid); font-weight: 500"
+    ><%= list.title%></span
+  >
+</div>
+  <!-- ── MAIN ── -->
+  <div class="container">
+    <!-- Header -->
+    <div class="listing-header">
+      <div class="header-row">
+        <div>
+          <h1 class="listing-title"><%= list.title%></h1> 
+          <div class="listing-meta">
+            <div class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <%=list.location%>, <%=list.city%>
+            </div>
+            <div class="meta-item">
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"
+                />
+              </svg>
+              Up to <%=list.guests%> Guests
+            </div>
+            <div class="rating-badge">
+              <%if(list.reviews.length>0) {%>
+                ★ <%=(list.reviews.reduce((sum, item) => sum + item.rating, 0)/list.reviews.length).toFixed(1)%>·
+              <%}%>
+              <span style="font-weight: 400; color: var(--gold-light)"
+                > <%=list.reviews.length%> reviews</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="listing-actions-top">
+          
+          <%if(currUser && list.owner._id.equals(currUser._id)){%>
+            <button class="btn-action-sm menu-dot">
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 12h.01m6 0h.01m5.99 0h.01"/>
+              </svg>
+            </button>
+
+            <div class="hidden-menu-for-listing hide">
+              <form action="/listing/<%=list._id%>/edit" method="get" class="hidden-menu-btn">
+                <button class="btn1">Edit</button>
+              </form>
+              <form action="/listing/<%=list._id%>?_method=DELETE" method="post" class="hidden-menu-btn">
+                <button class="btn2">Delete</button>
+              </form>
+            </div>
+          <%}%>
+          <!-- <button class="btn-action-sm">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
+            </svg>
+            Share
+          </button> -->
+          <!-- <button class="btn-action-sm">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+              />
+            </svg>
+            Save
+          </button> -->
+        </div>
+      </div>
+    </div>
+    <!-- GALLERY (4 photos layout) -->
+    <div class="gallery">
+      <div class="gallery-wrapper">
+        <div class="gallery-grid-many" id="gallery7">
+          <div class="photo-item photo-main" onclick="openLightbox(0)">
+            <img
+              src="<%=list.image[0].url%>"
+              alt="Hotel room main view"
+              style="max-height: 514px;"
+            />
+          </div>
+          <div class="photo-sub-grid">
+            <div class="photo-item photo-second" onclick="openLightbox(1)">
+              <img
+                src="<%=list.image[1].url%>"
+                alt="Room detail" 
+                style="max-height: 384px;"
+              />
+            </div>
+            <div class="photo-item" onclick="openLightbox(2)">
+              <img
+                src="<%=list.image[2].url%>"
+                alt="Pool"
+                style="max-height: 164px;scale: 1.1;"
+              />
+            </div>
+            <div class="photo-item has-overlay " onclick="openLightbox(3)">
+              <img
+                src="<%=list.image[3].url%>"
+                alt="More photos"
+                style="max-height: 164px;scale: 1.1;"
+              />
+              <div class="photo-overlay">
+                <svg
+                  width="18"
+                  height="18"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                </svg>
+                Show all <%=list.image.length%> photos
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="gallery-btn" onclick="openLightbox(0)">
+          <svg
+            width="14"
+            height="14"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          Show all photos
+        </button>
+      </div>
+    </div>
+    <!-- CONTENT GRID -->
+    <div class="content-grid">
+      <!-- LEFT -->
+      <div class="left-col">
+        <!-- Quick Facts -->
+        <div class="quick-facts">
+          <div class="fact-card">
+            <div class="fact-icon">🏨</div>
+            <div class="fact-label">Type</div>
+            <div class="fact-value"><%=list.type%></div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-icon">👥</div>
+            <div class="fact-label">Guests</div>
+            <div class="fact-value"><%=list.guests%> max</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-icon">⭐</div>
+            <div class="fact-label">Rating</div>
+            <div class="fact-value"><%if(list.reviews.length>0){%><%=(list.reviews.reduce((sum, item) => sum + item.rating, 0)/list.reviews.length).toFixed(1)%> / 5<%} else {%>0<%}%></div>
+          </div>
+        </div>
+        <!-- Host -->
+        <div class="host-bar">
+          <div class="host-avatar"><%=list.owner.name.slice(0,1).toUpperCase()%></div>
+          <div class="host-info">
+            <div class="host-name"><%=list.owner.name%></div>
+            <div class="host-meta">
+              Response rate: 98% · Usually replies within an hour
+            </div>
+          </div>
+          <div class="superhost-badge">⚡ Superhost</div>
+        </div>
+        <!-- About -->
+        <div class="section">
+          <h2 class="section-title">About this place</h2>
+          <p class="section-body" id="aboutText"><%=list.description%></p>
+          <button class="read-more" onclick="toggleAbout()">
+            Show more ›
+          </button>
+        </div>
+        <!-- Amenities -->
+        <div class="section">
+          <h2 class="section-title">What this place offers</h2>
+          <div class="amenities-grid">
+            <%for(amenity of list.amenities) {%>
+              <div class="amenity">
+                <span class="amenity-icon">👌</span><%=amenity%>
+              </div>
+            <%}%>
+          </div>
+        </div>
+        <!-- Map -->
+        <div class="section">
+          <h2 class="section-title">Where you'll be</h2>
+          <p class="section-body" style="margin-bottom: 14px"><%=list.location%>, <%=list.city%></p>
+          <div class="map-placeholder">
+            <div id="map">
+
+            </div>
+          </div>
+        </div>
+        <!-- Reviews -->
+        <div class="section">
+          <h2 class="section-title">Guest Reviews</h2>
+          <%if(list.reviews.length>0){%>
+          <div class="reviews-header">
+            <div class="overall-rating">
+              <div class="big-score"><%=(list.reviews.reduce((sum, item) => sum + item.rating, 0)/list.reviews.length).toFixed(1)%></div>
+              <div>
+                <div class="stars-row">
+                  <span class="star">★</span><span class="star">★</span
+                  ><span class="star">★</span><span class="star">★</span
+                  ><span class="star">★</span>
+                </div>
+                <div class="review-count"><%=list.reviews.length%> reviews</div>
+              </div>
+            </div>
+          </div>
+          <div class="rating-bars">
+            <div class="rating-bar-row">
+              <span class="bar-label">Cleanliness</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 96%"></div>
+              </div>
+              <span class="bar-val">4.9</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="bar-label">Location</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 94%"></div>
+              </div>
+              <span class="bar-val">4.7</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="bar-label">Value</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 92%"></div>
+              </div>
+              <span class="bar-val">4.6</span>
+            </div>
+            <div class="rating-bar-row">
+              <span class="bar-label">Service</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 98%"></div>
+              </div>
+              <span class="bar-val">4.9</span>
+            </div>
+          </div>
+          <%}%>
+          <div class="reviews-grid">
+            <%if(list.reviews.length>0) {%>
+              <%for(review of list.reviews) {%>
+                <div class="review-card">
+                  <div class="reviewer-row">
+                    <div class="reviewer-avatar"><%=review.written.name.slice(0,1).toUpperCase()%></div>
+                    <div>
+                      <div class="reviewer-name"><%=review.written.name%></div>
+                      <div class="reviewer-date">May 2026</div>
+                    </div>
+                  </div>
+                  <p class="starability-result" data-rating="<%= review.rating %>" style="scale: 0.5; left: -35px;">Rated: <%= review.rating %> stars</p>
+                  <p class="review-text"><%=review.comment%></p>
+                </div>
+              <%}%>
+            <%}else{%>
+              <p class="review-text" style="margin-left: 10px;">No reviews yet. Be the first to review!</p>
+            <%}%>
+          </div>
+          <%if(list.reviews.length>4) {%>
+            <button class="see-all-reviews">View all <%=list.reviews.length%> reviews →</button>
+          <%}%>
+          
+          <!-- Write a Review -->
+          <form action="/listing/<%= list._id %>/review" method="POST" novalidate id="reviewForm"
+            style="
+              background: var(--white);
+              border: 1px solid var(--border);
+              border-radius: var(--radius);
+              padding: 28px;
+              margin-top: 28px;
+              box-shadow: var(--shadow-sm);
+            "
+          >
+            <h3
+              style="
+                font-family: &quot;Cormorant Garamond&quot;, serif;
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin-bottom: 20px;
+              "
+            >
+              Write a Review
+            </h3>
+            <div style="margin-bottom: 16px">
+              <label
+                style="
+                  font-size: 0.8rem;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  letter-spacing: 0.8px;
+                  color: var(--ink-soft);
+                  display: block;
+                  margin-bottom: 8px;
+                "
+                >Rating</label
+              >
+              <div id="starRating" style="display: flex; gap: 6px">
+                <fieldset class="starability-fade"> 
+                  <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+                  <input type="radio" id="first-rate1" name="rating" value="1" />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input type="radio" id="first-rate2" name="rating" value="2" />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input type="radio" id="first-rate3" name="rating" value="3" />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input type="radio" id="first-rate4" name="rating" value="4" />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input type="radio" id="first-rate5" name="rating" value="5" />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+              </div>
+            </div>
+            <div style="margin-bottom: 16px">
+              <label
+                style="
+                  font-size: 0.8rem;
+                  font-weight: 600;
+                  text-transform: uppercase;
+                  letter-spacing: 0.8px;
+                  color: var(--ink-soft);
+                  display: block;
+                  margin-bottom: 8px;
+                "
+                >Comment</label
+              >
+              <textarea
+                id="reviewComment"
+                rows="4"
+                placeholder="Write your experience..."
+                name="comment"
+                required
+                style="
+                  width: 100%;
+                  border-radius: var(--radius-sm);
+                  padding: 12px 14px;
+                  font-family: &quot;DM Sans&quot;, sans-serif;
+                  font-size: 0.9rem;
+                  color: var(--ink);
+                  resize: vertical;
+                  outline: none;
+                  transition: border-color 0.2s;
+                "
+                onfocus="this.style.borderColor = 'var(--gold)'"
+                onblur="this.style.borderColor = 'var(--border)'"
+              ></textarea>
+              <div class="invalid-feedback">
+                &nbsp;&nbsp;Please enter your valuable experience.
+              </div>
+            </div>
+            <button
+            type="submit"
+              style="
+                background: linear-gradient(135deg, var(--gold), #b07d28);
+                color: white;
+                border: none;
+                border-radius: var(--radius-sm);
+                padding: 12px 28px;
+                font-size: 0.9rem;
+                font-weight: 700;
+                cursor: pointer;
+                font-family: &quot;DM Sans&quot;, sans-serif;
+                transition: all 0.2s;
+              "
+              onmouseover="this.style.transform = 'translateY(-1px)'"
+              onmouseout="this.style.transform = ''"
+            >
+              Submit Review
+            </button>
+
+          </form>
+        </div>
+      </div>
+      <!-- RIGHT (Booking Card) -->
+      <div class="right-col">
+        <div class="booking-card">
+          <div class="price-line">
+            <span class="price-amount">₹ <%= Number(list.price).toLocaleString("en-IN") %></span>
+            <span class="price-unit">/ night</span>
+          </div>
+          <div class="price-rating">
+            <%if(list.reviews.length>0) {%><span style="color: var(--gold)">★</span> <%=(list.reviews.reduce((sum, item) => sum + item.rating, 0)/list.reviews.length).toFixed(1)%> · <%}%><%=list.reviews.length%> reviews
+          </div>
+          <div class="instant-banner">
+            <div class="instant-icon">⚡</div>
+            <div class="instant-text">
+              <strong>Instant Booking</strong>
+              <span
+                >Reserve this property directly or contact the owner for
+                availability details.</span
+              >
+            </div>
+          </div>
+          <!-- <div class="date-picker-grid">
+            <button class="date-field">
+              <div class="date-label">Check-in</div>
+              <div class="date-value">Add date</div>
+            </button>
+            <button class="date-field">
+              <div class="date-label">Checkout</div>
+              <div class="date-value">Add date</div>
+            </button>
+          </div> -->
+          <!-- <button class="guest-field">
+            <div>
+              <div class="date-label">Guests</div>
+              <div class="date-value" id="guestDisplay">1 guest</div>
+            </div>
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button> -->
+          <!-- <button class="btn-reserve">Reserve Now</button> -->
+          <button class="btn-contact">Contact Owner</button>
+          <div class="no-charge-note">You won't be charged yet</div>
+        </div>
+        <!-- Host card -->
+        <div
+          style="
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 16px;
+            box-shadow: var(--shadow-sm);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 16px;
+            "
+          >
+            <div
+              class="host-avatar"
+              style="width: 56px; height: 56px; font-size: 1.6rem"
+            ><%=list.owner.name.slice(0,1).toUpperCase()%></div>
+            <div>
+              <div style="font-weight: 700; font-size: 1rem"><%=list.owner.name%></div>
+              <div style="font-size: 0.8rem; color: var(--ink-soft)">
+                Hosted by Owner
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+              margin-bottom: 16px;
+            "
+          >
+            <div
+              style="
+                text-align: center;
+                padding: 12px;
+                background: var(--gold-pale);
+                border-radius: var(--radius-sm);
+              "
+            >
+              <div
+                style="
+                  font-family: &quot;Cormorant Garamond&quot;, serif;
+                  font-size: 1.4rem;
+                  font-weight: 700;
+                  color: var(--gold);
+                "
+              >
+                98%
+              </div>
+              <div
+                style="
+                  font-size: 0.72rem;
+                  color: var(--ink-soft);
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                "
+              >
+                Response rate
+              </div>
+            </div>
+            <div
+              style="
+                text-align: center;
+                padding: 12px;
+                background: var(--gold-pale);
+                border-radius: var(--radius-sm);
+              "
+            >
+              <div
+                style="
+                  font-family: &quot;Cormorant Garamond&quot;, serif;
+                  font-size: 1.4rem;
+                  font-weight: 700;
+                  color: var(--gold);
+                "
+              >
+                &lt;1hr
+              </div>
+              <div
+                style="
+                  font-size: 0.72rem;
+                  color: var(--ink-soft);
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                "
+              >
+                Response time
+              </div>
+            </div>
+          </div>
+          <button
+            style="
+              width: 100%;
+              background: none;
+              border: 1.5px solid var(--border);
+              border-radius: var(--radius-sm);
+              padding: 11px;
+              font-size: 0.85rem;
+              font-weight: 600;
+              cursor: pointer;
+              color: var(--ink-mid);
+              font-family: &quot;DM Sans&quot;, sans-serif;
+              transition: all 0.2s;
+            "
+            onmouseover="
+              this.style.borderColor = 'var(--gold)';
+              this.style.color = 'var(--gold)';
+            "
+            onmouseout="
+              this.style.borderColor = 'var(--border)';
+              this.style.color = 'var(--ink-mid)';
+            "
+          >
+            Message Host
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ── MOBILE BOOKING BAR ── -->
+  <div class="mobile-booking-bar">
+    <div class="mobile-price">
+      <strong>₹ <%= Number(list.price).toLocaleString("en-IN") %></strong> <span>/ night · ★ 4.9</span>
+    </div>
+    <button class="btn-reserve-mobile">Reserve Now</button>
+  </div>
+  <!-- ── LIGHTBOX ── -->
+
+  <div class="lightbox" id="lightbox">
+    <div class="counter" id="counter">1 / 4</div>
+    <button class="close-btn" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-btn prev-btn" onclick="prevPhoto()">‹</button>
+    <img id="lightboxImg" />
+    <button class="lightbox-btn next-btn" onclick="nextPhoto()">›</button>
+  </div>
+
+
+<script>
+  /* Review Form Validation */
+  let reviewForm = document.getElementById("reviewForm");
+
+  reviewForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let valid = true;
+
+    const comment = document.getElementById("reviewComment");
+    const commentError = comment.nextElementSibling;
+
+    // Remove old errors
+    comment.classList.remove("input-error");
+    commentError.classList.remove("show");
+
+    // Comment validation
+    if (!comment.value.trim()) {
+      comment.classList.add("input-error");
+      commentError.classList.add("show");
+      valid = false;
+    }
+
+    // Rating validation
+    const rating = document.querySelector('input[name="rating"]:checked');
+
+    if (!rating) {
+      valid = false;
+      alert("Please select a rating");
+    }
+
+    // Submit
+    if (valid) {
+      const btn = this.querySelector("button");
+
+      btn.disabled = true;
+      btn.textContent = "Submitting...";
+
+      reviewForm.submit();
+    }
+  }); 
+  const map = L.map("map").setView([<%=list.geometry.coordinates[1]%>,<%=list.geometry.coordinates[0]%>], 13);
+
+      L.tileLayer(
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution: "&copy; OpenStreetMap contributors",
+        }
+      ).addTo(map);
+
+      L.marker([<%=list.geometry.coordinates[1]%>,<%=list.geometry.coordinates[0]%>])
+        .addTo(map)
+        .bindPopup("<%=list.title%>")
+        .openPopup();
+    window.listImg = <%- JSON.stringify(list.image) %>;
+    window.list = <%- JSON.stringify(list) %>;
+</script>

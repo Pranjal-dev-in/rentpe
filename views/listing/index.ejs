@@ -1,0 +1,208 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<% if(success && success.length > 0) { %>
+  <div class="action-toast-msg success">
+    <i class="fa-solid fa-circle-check action-toast-tick-icon"></i> &nbsp;&nbsp;<span><%= success %></span>
+  </div>
+<% } %>
+<% if(info && info.length > 0) { %>
+  <div class="action-toast-msg info">
+    <i class="fa-solid fa-circle-info action-toast-tick-icon"></i> &nbsp;&nbsp;<span><%= info %></span>
+  </div>
+<% } %>
+
+<body>
+  <section class="hero">
+    <div style="animation: fadeUp 0.5s ease both">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        Live in Bareilly &amp; Uttar Pradesh
+      </div>
+      <h1 class="hero-title">
+        Find trusted<br />stays, <span class="accent">faster.</span>
+      </h1>
+      <p class="hero-sub">
+        Browse quality listings or publish your own property in minutes. No
+        middlemen, no hidden fees.
+      </p>
+      <div class="hero-actions">
+        <a href="#listings" class="btn-primary">
+          <svg
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          Browse Listings
+        </a>
+        <a href="/listing/new" class="btn-ghost">List Your Property</a>
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="stat-row">
+        <div class="stat-item">
+          <div class="stat-num"><span class="gold">250</span>+</div>
+          <div class="stat-label">Active Listings</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span class="gold">98</span>%</div>
+          <div class="stat-label">Response Rate</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span class="gold">4.9</span></div>
+          <div class="stat-label">Avg. Rating</div>
+        </div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="panel-search">
+        <svg
+          class="search-icon"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search by city, area or name…"
+          id="searchInput"
+        />
+      </div>
+      <div class="panel-filter-row">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="budget">Budget</button>
+        <button class="filter-chip" data-filter="mid">Mid-range</button>
+        <button class="filter-chip" data-filter="premium">Premium</button>
+      </div>
+    </div>
+  </section>
+  <div class="trust-strip">
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+      </div>
+      <div class="trust-title">Verified Properties</div>
+      <div class="trust-desc">Every listing reviewed before going live</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          viewBox="0 0 24 24"
+        >
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+        </svg>
+      </div>
+      <div class="trust-title">Instant Booking</div>
+      <div class="trust-desc">Reserve directly without waiting</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          viewBox="0 0 24 24"
+        >
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      </div>
+      <div class="trust-title">Superhosts</div>
+      <div class="trust-desc">Top-rated owners with &lt;1hr reply time</div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          viewBox="0 0 24 24"
+        >
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      </div>
+      <div class="trust-title">Transparent Pricing</div>
+      <div class="trust-desc">No hidden fees, pay what you see</div>
+    </div>
+  </div>
+  <section class="section" id="listings">
+    <div class="section-header">
+      <h2 class="section-title">All Listings</h2>
+      <span class="section-count" id="listingCount"><%=listings.length%> properties</span>
+    </div>
+    <div class="cards-grid" id="cardsGrid">
+      
+    <% for(listing of listings) {%>
+    <div class="listing-card" data-tier="mid">
+      <div class="card-img-wrap">
+        <div class="card-img-placeholder">
+          <img src="<%=listing.image[0].url%>" alt="<%=listing.image[0].filename%>">
+        </div>
+        <button
+          class="card-save"
+          onclick="toggleSave(this)"
+          aria-label="Save"
+        >
+          ♡
+        </button>
+        <div class="card-price-badge">₹ <%= Number(listing.price).toLocaleString("en-IN") %> <span>/night</span></div>
+      </div>
+      <div class="card-body">
+          <div class="card-name"><%=listing.title%></div>
+          <div class="card-location">
+            <span class="card-location-icon">📍</span><%=listing.location%> , <%=listing.city%>
+          </div>
+          <div class="card-footer">
+            <div class="card-rating">
+              <%if(listing.reviews.length>0) {%><span class="star">★</span> <%=(listing.reviews.reduce((sum, item) => sum + item.rating, 0)/listing.reviews.length).toFixed(1)%>
+                <%if((listing.reviews.reduce((sum, item) => sum + item.rating, 0)/listing.reviews.length).toFixed(1)>3){%>
+              <span style="color: var(--ink-soft)">· Top Rated</span>
+              <%}else{%>
+                <span style="color: var(--ink-soft)">· Featured</span>
+                <%}%>
+                <%}else{%>
+                <div class="new-badge">
+                  <p>new</p>
+                </div>  
+              <%}%>
+            </div>
+            <a href="/listing/<%=listing._id%>" class="btn-card-view">View</a>
+          </div>
+        </div>
+      </div>
+      <%}%>
+    </div>
+  </section>
+  <div class="toast" id="toast"></div>
+</body>

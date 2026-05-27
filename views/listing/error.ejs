@@ -1,0 +1,282 @@
+<% layout("layout/boilerplate") %>
+
+<!-- ── ERROR PAGE ── -->
+<main class="error-page" role="main">
+
+  <%if(status==404 || status==400){%>
+  <!-- ════════════════════════════
+         404 — NOT FOUND
+    ════════════════════════════ -->
+  <div class="error-card" id="e404">
+    <!-- 404 PANEL -->
+    <div class="error-panel active" id="panel-e404">
+      <div class="error-illustration">
+        <div class="error-bg-num">404</div>
+        <div class="orbit-ring">
+          <div class="orbit-dot"></div>
+          <div class="orbit-dot"></div>
+        </div>
+        <div class="error-svg-wrap">
+          <div
+            class="illus-404"
+            role="img"
+            aria-label="Lost building illustration"
+          >
+            🏚️
+          </div>
+        </div>
+      </div>
+
+      <div class="error-eyebrow">
+        <div class="eyebrow-dot"></div>
+        Error 404
+      </div>
+      <h1 class="error-title">
+        This room doesn't<br />exist <span class="accent">anymore.</span>
+      </h1>
+      <p class="error-desc">
+        The listing or page you were looking for has either been removed, moved,
+        or never existed. Let's get you back on track.
+      </p>
+
+      <!-- Search -->
+      <div class="error-search" role="search">
+        <input
+          type="text"
+          id="searchQuery"
+          placeholder="Search for a listing, city or property…"
+          aria-label="Search listings"
+        />
+        <button type="button" onclick="doSearch()">Search</button>
+      </div>
+
+      <!-- Actions -->
+      <div class="error-actions">
+        <a href="/listing" class="btn-primary">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Back to Home
+        </a>
+        <a href="/listing#listings" class="btn-secondary">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          Browse Listings
+        </a>
+      </div>
+
+      <div class="error-divider"></div>
+
+      <div class="error-links-label">Or jump to</div>
+      <div class="error-links">
+        <a href="/listing" class="error-link-chip"
+          ><span class="error-link-chip-icon">🏠</span> Home</a
+        >
+        <a href="/listing/new" class="error-link-chip"
+          ><span class="error-link-chip-icon">➕</span> Create Listing</a
+        >
+        <a href="/login" class="error-link-chip"
+          ><span class="error-link-chip-icon">🔑</span> Login</a
+        >
+        <a href="/signup" class="error-link-chip"
+          ><span class="error-link-chip-icon">✨</span> Sign Up</a
+        >
+      </div>
+
+      <div style="margin-top: 24px">
+        <span class="error-code-badge">HTTP <code>404</code> · Not Found</span>
+      </div>
+    </div>
+  </div>
+  <!-- /e404 card -->
+
+  <%}else if(status==500){%>
+  <!-- ════════════════════════════
+         500 — SERVER ERROR
+    ════════════════════════════ -->
+  <div class="error-card" id="e500" >
+    <div class="error-panel active">
+      <div class="error-illustration">
+        <div class="error-bg-num">500</div>
+        <div class="error-svg-wrap">
+          <div
+            class="illus-500"
+            role="img"
+            aria-label="Broken gears illustration"
+          >
+            <span class="gear">⚙️</span>
+            <span class="gear-sm">🔧</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-eyebrow">
+        <div class="eyebrow-dot" style="background: #d93025"></div>
+        Error 500
+      </div>
+      <h1 class="error-title">
+        Something broke<br />on <span class="accent">our end.</span>
+      </h1>
+      <p class="error-desc">
+        Our servers encountered an unexpected error. Our team has been notified
+        automatically and is working to fix this. Please try again in a few
+        moments.
+      </p>
+
+      <div class="error-actions">
+        <button class="btn-primary" onclick="reloadPage()">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+          </svg>
+          Try Again
+        </button>
+        <a href="/listing" class="btn-secondary">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+          Go Home
+        </a>
+      </div>
+
+      <div class="error-divider"></div>
+
+      <div class="error-links-label">Quick links</div>
+      <div class="error-links">
+        <a href="/listing" class="error-link-chip"
+          ><span class="error-link-chip-icon">🏠</span> Home</a
+        >
+        <a href="/listing#listings" class="error-link-chip"
+          ><span class="error-link-chip-icon">🏨</span> Listings</a
+        >
+      </div>
+
+      <div style="margin-top: 24px">
+        <span class="error-code-badge"
+          >HTTP <code>500</code> · Internal Server Error · ID:
+          <code id="errorId">RPE-<span id="eid"></span></code
+        ></span>
+      </div>
+    </div>
+  </div>
+  <%}else if(status==403){%>
+  <!-- ════════════════════════════
+         403 — FORBIDDEN
+    ════════════════════════════ -->
+  <div class="error-card" id="e403">
+    <div class="error-panel active">
+      <div class="error-illustration">
+        <div class="error-bg-num">403</div>
+        <div class="orbit-ring">
+          <div class="orbit-dot" style="animation-duration: 7s"></div>
+        </div>
+        <div class="error-svg-wrap">
+          <div class="illus-403" role="img" aria-label="Locked illustration">
+            🔒
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="error-eyebrow"
+        style="background: #fff0f0; border-color: #f8c4c4"
+      >
+        <div
+          class="eyebrow-dot"
+          style="background: #d93025; animation: none"
+        ></div>
+        <span style="color: #9b1c1c">Error 403</span>
+      </div>
+      <h1 class="error-title">Access <span class="accent">denied.</span></h1>
+      <p class="error-desc">
+        You don't have permission to view this page. This could be because
+        you're not logged in, your session expired, or you don't have the
+        required role.
+      </p>
+
+      <div class="error-actions">
+        <a href="/login" class="btn-primary">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+            <polyline points="10 17 15 12 10 7" />
+            <line x1="15" y1="12" x2="3" y2="12" />
+          </svg>
+          Login to Continue
+        </a>
+        <a href="/listing" class="btn-secondary">
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+          Go Home
+        </a>
+      </div>
+
+      <div class="error-divider"></div>
+
+      <div class="error-links-label">Try these instead</div>
+      <div class="error-links">
+        <a href="/login" class="error-link-chip"
+          ><span class="error-link-chip-icon">🔑</span> Login</a
+        >
+        <a href="/signup" class="error-link-chip"
+          ><span class="error-link-chip-icon">✨</span> Create Account</a
+        >
+        <a href="/listing#listings" class="error-link-chip"
+          ><span class="error-link-chip-icon">🏨</span> Browse Listings</a
+        >
+      </div>
+
+      <div style="margin-top: 24px">
+        <span class="error-code-badge">HTTP <code>403</code> · Forbidden</span>
+      </div>
+    </div>
+  </div>
+  <%}%>
+</main>
+<!-- TOAST -->
+<div class="toast-msg" id="toast"></div>
