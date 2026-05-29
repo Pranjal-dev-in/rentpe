@@ -141,25 +141,29 @@
           </div>
           <div class="photo-sub-grid">
             <div class="photo-item photo-second" onclick="openLightbox(1)">
+              <%if(list.image[1]){%>
               <img
                 src="<%=list.image[1].url%>"
                 alt="Room detail" 
                 style="max-height: 384px;"
               />
+              <%}%>
             </div>
             <div class="photo-item" onclick="openLightbox(2)">
+              <%if(list.image[2]){%>
               <img
                 src="<%=list.image[2].url%>"
                 alt="Pool"
                 style="max-height: 164px;scale: 1.1;"
-              />
+              /><%}%>
             </div>
             <div class="photo-item has-overlay " onclick="openLightbox(3)">
+              <%if(list.image[3]){%>
               <img
                 src="<%=list.image[3].url%>"
                 alt="More photos"
                 style="max-height: 164px;scale: 1.1;"
-              />
+              /><%}%>
               <div class="photo-overlay">
                 <svg
                   width="18"
@@ -244,7 +248,7 @@
           <div class="amenities-grid">
             <%for(amenity of list.amenities) {%>
               <div class="amenity">
-                <span class="amenity-icon">👌</span><%=amenity%>
+                <span class="amenity-icon"></span><%=amenity%>
               </div>
             <%}%>
           </div>

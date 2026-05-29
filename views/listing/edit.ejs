@@ -1,7 +1,7 @@
 <% layout("layout/boilerplate") %>
 
 <!-- FORM CONTAINER -->
-
+<!-- 
 <div class="container py-5">
   <div class="form-box mx-auto">
     <h2 class="mb-4">Edit Your Listing</h2>
@@ -102,4 +102,744 @@
       </div>
     </form>
   </div>
+</div> -->
+
+<!-- ── HERO ── -->
+<div class="edit-hero">
+  <div class="edit-hero-inner">
+    <div>
+      <div class="auth-eyebrow" style="margin-bottom: 14px">
+        <div class="eyebrow-dot"></div>
+        Editing listing
+      </div>
+      <h1 class="edit-hero-title">
+        Edit your <span class="accent">listing</span>
+      </h1>
+      <p class="edit-hero-sub">
+        Update your property details below. Changes are applied on save.
+      </p>
+    </div>
+    <div class="edit-hero-badge">
+      <div class="edit-hero-badge-thumb" id="badgeThumb">
+        <img src="<%=list.image[0].url%>" id="badgeImg" alt="listing thumb" />
+      </div>
+      <div>
+        <div class="edit-hero-badge-name" id="badgeName"><%=list.title%></div>
+        <div class="edit-hero-badge-meta" id="badgeMeta">
+          <%=list.city%> · ₹ <%= Number(list.price).toLocaleString("en-IN") %> /
+          night
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ── BODY ── -->
+<div class="edit-body">
+  <form
+    id="editForm"
+    action="/listing/<%=list._id%>?_method=PUT"
+    method="post"
+    novalidate
+    enctype="multipart/form-data"
+  >
+    <!-- ══ 1. BASICS ══ -->
+    <div class="edit-section">
+      <div class="edit-section-head">
+        <div class="edit-section-icon">✏️</div>
+        <div>
+          <div class="edit-section-title">Basic Information</div>
+          <div class="edit-section-desc">
+            Update your listing's title and description.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="fg-title">
+        <label class="form-label" for="title">
+          Listing title <span style="color: var(--gold)">*</span>
+          <span class="changed-tag">edited</span>
+        </label>
+        <div class="input-wrap">
+          <svg
+            class="input-icon"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <input
+            class="form-input"
+            type="text"
+            id="title"
+            name="title"
+            value="<%=list.title%>"
+            required
+            maxlength="80"
+            oninput="
+              markChanged('fg-title');
+              charCount(this, 'tC', 80);
+              updateBadge();
+            "
+          />
+        </div>
+        <div class="input-footer-row">
+          <div class="form-error" id="titleError">Title is required.</div>
+          <span class="char-count"><span id="tC">0</span>/80</span>
+        </div>
+      </div>
+
+      <div class="form-group" id="fg-desc">
+        <label class="form-label" for="description">
+          Description <span style="color: var(--gold)">*</span>
+          <span class="changed-tag">edited</span>
+        </label>
+        <textarea
+          class="form-input form-textarea"
+          id="description"
+          name="description"
+          rows="5"
+          required
+          maxlength="500"
+          oninput="
+            markChanged('fg-desc');
+            charCount(this, 'dC', 500);
+          "
+        >
+<%=list.description%></textarea
+        >
+        <div class="input-footer-row">
+          <div class="form-error" id="descriptionError">
+            Description is required.
+          </div>
+          <span class="char-count"><span id="dC">0</span>/500</span>
+        </div>
+      </div>
+
+      <div class="fg2">
+        <div class="form-group" id="fg-type">
+          <label class="form-label" for="type">
+            Property type <span style="color: var(--gold)">*</span>
+            <span class="changed-tag">edited</span>
+          </label>
+          <div class="input-wrap select-wrap">
+            <svg
+              class="input-icon"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            </svg>
+            <select
+              class="form-input form-select"
+              id="type"
+              name="type"
+              required
+              onchange="markChanged('fg-type')"
+              value="<%=list.type%>"
+            >
+              <option>Hotel</option>
+              <option>Guest House</option>
+              <option>Resort</option>
+              <option>Homestay</option>
+              <option>Apartment</option>
+              <option>Villa</option>
+              <option>Hostel</option>
+            </select>
+          </div>
+          <div class="form-error" id="typeError">Select a type.</div>
+        </div>
+        <div class="form-group" id="fg-guests">
+          <label class="form-label" for="guests">
+            Max guests <span style="color: var(--gold)">*</span>
+            <span class="changed-tag">edited</span>
+          </label>
+          <div class="input-wrap">
+            <svg
+              class="input-icon"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+            </svg>
+            <input
+              class="form-input"
+              type="number"
+              id="guests"
+              name="guests"
+              value="<%=list.guests%>"
+              min="1"
+              max="50"
+              required
+              oninput="markChanged('fg-guests')"
+            />
+          </div>
+          <div class="form-error" id="guestsError">Enter max guests.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 2. LOCATION & PRICE ══ -->
+    <div class="edit-section">
+      <div class="edit-section-head">
+        <div class="edit-section-icon">📍</div>
+        <div>
+          <div class="edit-section-title">Location &amp; Pricing</div>
+          <div class="edit-section-desc">
+            Update where your property is and what you charge.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="fg-location">
+        <label class="form-label" for="location">
+          Street address / Area <span style="color: var(--gold)">*</span>
+          <span class="changed-tag">edited</span>
+        </label>
+        <div class="input-wrap">
+          <svg
+            class="input-icon"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <input
+            class="form-input"
+            type="text"
+            id="location"
+            name="location"
+            value="<%=list.location%>"
+            required
+            oninput="markChanged('fg-location')"
+          />
+        </div>
+        <div class="form-error" id="locationError">Location is required.</div>
+      </div>
+
+      <div class="fg3">
+        <div class="form-group" id="fg-city">
+          <label class="form-label" for="city">
+            City <span style="color: var(--gold)">*</span>
+            <span class="changed-tag">edited</span>
+          </label>
+          <div class="input-wrap">
+            <svg
+              class="input-icon"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <rect x="2" y="7" width="20" height="14" rx="2" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>
+            <input
+              class="form-input"
+              type="text"
+              id="city"
+              name="city"
+              value="<%=list.city%>"
+              required
+              oninput="markChanged('fg-city')"
+            />
+          </div>
+          <div class="form-error" id="cityError">City is required.</div>
+        </div>
+        <div class="form-group" id="fg-country">
+          <label class="form-label" for="country">
+            Country <span style="color: var(--gold)">*</span>
+            <span class="changed-tag">edited</span>
+          </label>
+          <div class="input-wrap select-wrap">
+            <svg
+              class="input-icon"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path
+                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              />
+            </svg>
+            <select
+              class="form-input form-select"
+              id="country"
+              name="country"
+              required
+              onchange="markChanged('fg-country')"
+            >
+              <option selected>India</option>
+              <option>Nepal</option>
+              <option>Sri Lanka</option>
+              <option>Bangladesh</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-error" id="countryError">Country is required.</div>
+        </div>
+        <div class="form-group" id="fg-price">
+          <label class="form-label" for="price">
+            Price / night (₹) <span style="color: var(--gold)">*</span>
+            <span class="changed-tag">edited</span>
+          </label>
+          <div class="input-wrap">
+            <span class="input-icon-text">₹</span>
+            <input
+              class="form-input input-prefix"
+              type="number"
+              id="price"
+              name="price"
+              value="<%=list.price%>"
+              min="100"
+              required
+              oninput="
+                markChanged('fg-price');
+                updateBadge();
+              "
+            />
+          </div>
+          <div class="form-error" id="priceError">Enter a valid price.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pincode">PIN code</label>
+          <div class="input-wrap">
+            <svg
+              class="input-icon"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg>
+            <input
+              class="form-input"
+              type="text"
+              id="pincode"
+              name="pincode"
+              value="<%=list.pincode%>"
+              maxlength="6"
+              pattern="\d{6}"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 3. AMENITIES ══ -->
+    <div class="edit-section">
+      <div class="edit-section-head">
+        <div class="edit-section-icon">✅</div>
+        <div>
+          <div class="edit-section-title">Amenities</div>
+          <div class="edit-section-desc">
+            Check everything your property offers.
+          </div>
+        </div>
+      </div>
+      <div class="amenity-picker">
+        <label class="amenity-chip-pick"
+          ><input type="checkbox" name="amenities" value="🌊 Sea View" /><span
+            >🌊 Sea View</span
+          ></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="🏊 Private Pool"
+          /><span>🏊 Private Pool</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="📶 Free WiFi"
+            checked
+          /><span>📶 Free WiFi</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="🚗 Parking"
+            checked
+          /><span>🚗 Parking</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="❄️ Air Conditioning"
+            checked
+          /><span>❄️ Air Conditioning</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="🍽️ Restaurant"
+            checked
+          /><span>🍽️ Restaurant</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="🛎️ Room Service"
+          /><span>🛎️ Room Service</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="💪 Fitness Center"
+          /><span>💪 Fitness Center</span></label
+        >
+        <label class="amenity-chip-pick"
+          ><input type="checkbox" name="amenities" value="🍳 Breakfast" /><span
+            >🍳 Breakfast</span
+          ></label
+        >
+        <label class="amenity-chip-pick"
+          ><input type="checkbox" name="amenities" value="💆 Spa" /><span
+            >💆 Spa</span
+          ></label
+        >
+        <label class="amenity-chip-pick"
+          ><input type="checkbox" name="amenities" value="🍸 Bar" /><span
+            >🍸 Bar</span
+          ></label
+        >
+        <label class="amenity-chip-pick"
+          ><input
+            type="checkbox"
+            name="amenities"
+            value="🐾 Pet Friendly"
+          /><span>🐾 Pet Friendly</span></label
+        >
+      </div>
+    </div>
+
+    <!-- ══ 4. COVER PHOTO ══ -->
+    <div class="edit-section">
+      <div class="edit-section-head">
+        <div class="edit-section-icon">📸</div>
+        <div>
+          <div class="edit-section-title">Cover Photo</div>
+          <div class="edit-section-desc">
+            Upload a new photo to replace the current one, or leave empty to
+            keep it.
+          </div>
+        </div>
+      </div>
+      <div class="img-replace-wrap">
+        <div class="img-current">
+          <img
+            id="currentImg"
+            src="<%=list.image[0].url%>"
+            alt="Current cover photo"
+          />
+          <div class="img-current-label">Current photo</div>
+        </div>
+        <div>
+          <div class="img-replace-title">Replace photo</div>
+          <p class="img-replace-note">
+            Upload a new image to replace the current cover. JPG, PNG or WEBP ·
+            Max 10 MB. Leave empty to keep the existing photo.
+          </p>
+          <div
+            class="upload-zone"
+            id="uploadZone"
+            onclick="document.getElementById('newImage').click()"
+          >
+            <div class="upload-zone-inner" id="uploadInner">
+              <div class="upload-icon">📤</div>
+              <div class="upload-title">Click or drag & drop</div>
+              <div class="upload-sub">to upload a new photo</div>
+            </div>
+            <img
+              class="upload-preview"
+              id="uploadPreview"
+              src=""
+              alt="New photo preview"
+              style="display: none"
+            />
+          </div>
+          <input
+            type="file"
+            id="newImage"
+            name="newImage"
+            accept="image/*"
+            multiple
+            style="display: none"
+            onchange="previewImg(this)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SAVE ACTIONS ══ -->
+    <div class="edit-actions">
+      <div class="actions-info">
+        <svg
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        Fields highlighted in gold have been changed.
+      </div>
+      <a href="/listing/<%=list._id%>" class="btn-cancel">
+        <svg
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+        Cancel
+      </a>
+      <button type="submit" class="btn-save" id="saveBtn">
+        <svg
+          width="15"
+          height="15"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span id="saveTxt">Save Changes</span>
+      </button>
+    </div>
+  </form>
+
+  <!-- ══ DANGER ZONE ══ -->
+  <div class="danger-zone">
+    <div class="danger-text">
+      <div class="danger-title">🗑️ Delete this listing</div>
+      <div class="danger-desc">
+        Permanently remove this property from RentPe. This action cannot be
+        undone and all associated reviews will be deleted.
+      </div>
+    </div>
+    <button class="btn-delete" onclick="openDel()">
+      <svg
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <polyline points="3 6 5 6 21 6" />
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+        <path d="M10 11v6" />
+        <path d="M14 11v6" />
+        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+      </svg>
+      Delete Listing
+    </button>
+  </div>
+</div>
+<!-- /edit-body -->
+
+<!-- ══ DELETE MODAL ══ -->
+<div class="modal-overlay" id="delModal">
+  <div class="modal-card">
+    <div class="modal-icon">⚠️</div>
+    <h2 class="modal-title">Delete Listing?</h2>
+    <p class="modal-desc">You're about to permanently delete</p>
+    <span class="modal-name" id="modalName">Hotel Rajani</span>
+    <p class="modal-desc">
+      This cannot be undone. All reviews will also be removed.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-m-cancel" onclick="closeDel()">Cancel</button>
+      <button class="btn-m-delete" onclick="confirmDel()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<form
+  action="/listing/<%=list._id%>?_method=DELETE"
+  method="post"
+  id="delete-form-listing"
+  style="display: none"
+></form>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── init char counts ── */
+  window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("tC").textContent =
+      document.getElementById("title").value.length;
+    document.getElementById("dC").textContent =
+      document.getElementById("description").value.length;
+  });
+
+  function charCount(el, id, max) {
+    document.getElementById(id).textContent = el.value.length;
+  }
+
+  function markChanged(id) {
+    document.getElementById(id)?.classList.add("field-changed");
+  }
+
+  /* ── update hero badge live ── */
+  function updateBadge() {
+    const t = document.getElementById("title").value.trim();
+    const p = document.getElementById("price").value;
+    const c = document.getElementById("city").value.trim();
+    if (t) document.getElementById("badgeName").textContent = t;
+    document.getElementById("badgeMeta").textContent =
+      (c || "Bareilly") +
+      " · ₹ " +
+      (p ? Number(p).toLocaleString("en-IN") : "—") +
+      " / night";
+  }
+
+  /* ── image preview ── */
+  function previewImg(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById("uploadPreview").src = e.target.result;
+      document.getElementById("uploadPreview").style.display = "block";
+      document.getElementById("uploadInner").style.display = "none";
+      document.getElementById("currentImg").src = e.target.result;
+      document.getElementById("badgeImg").src = e.target.result;
+      toast("New photo ready — save to apply.");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* drag & drop */
+  const zone = document.getElementById("uploadZone");
+  zone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    zone.classList.add("drag-over");
+  });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith("image/")) {
+      const dt = new DataTransfer();
+      dt.items.add(f);
+      document.getElementById("newImage").files = dt.files;
+      previewImg(document.getElementById("newImage"));
+    }
+  });
+
+  /* ── form submit ── */
+  let form = document.getElementById("editForm");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let ok = true;
+    [
+      "title",
+      "description",
+      "type",
+      "guests",
+      "location",
+      "city",
+      "country",
+      "price",
+    ].forEach((id) => {
+      const el = document.getElementById(id);
+      const er = document.getElementById(id + "Error");
+      if (er) er.classList.remove("show");
+      if (el) el.classList.remove("input-error");
+      if (el && !el.value.trim()) {
+        if (er) er.classList.add("show");
+        el.classList.add("input-error");
+        ok = false;
+      }
+    });
+    if (!ok) {
+      toast("Please fill in all required fields.");
+      return;
+    }
+
+    const btn = document.getElementById("saveBtn");
+    const txt = document.getElementById("saveTxt");
+    btn.classList.add("loading");
+    txt.textContent = "Saving…";
+    form.submit();
+  });
+
+  /* ── delete modal ── */
+  function openDel() {
+    document.getElementById("modalName").textContent =
+      document.getElementById("title").value.trim() || "this listing";
+    document.getElementById("delModal").classList.add("open");
+  }
+  function closeDel() {
+    document.getElementById("delModal").classList.remove("open");
+  }
+  function confirmDel() {
+    closeDel();
+    toast("Listing deleted. Redirecting…");
+    document.getElementById("delete-form-listing").submit();
+  }
+  document.getElementById("delModal").addEventListener("click", (e) => {
+    if (e.target.id === "delModal") closeDel();
+  });
+
+  /* ── toast ── */
+  function toast(msg, dur = 2600) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove("show"), dur);
+  }
+</script>

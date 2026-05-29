@@ -40,23 +40,24 @@ router.get(
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let list = await Listing.findById(id);
-    res.render("listing/edit.ejs", { list });
+    res.render("listing/edit.ejs", { list, file: "form" });
   }),
 );
 router.put(
   "/:id",
   isLoggedIn,
   isOwned,
-  upload.single("image"),
-  validateListing,
+  upload.array("newImage"),
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let newListingData = req.body;
+    console.log(req.files);
     let listing = await Listing.findByIdAndUpdate(id, newListingData);
-    if (req.file !== undefined) {
-      let url = req.file.path;
-      let filename = req.file.filename;
-      listing.image = { url, filename };
+    if (req.files && req.files.length > 0) {
+      listing.image = req.files.map((file) => ({
+        url: file.path,
+        filename: file.filename,
+      }));
       await listing.save();
     }
     req.flash("success", "Changes applied!");
