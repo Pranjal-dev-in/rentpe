@@ -14,6 +14,7 @@ const passport = require("passport");
 const passportLocal = require("passport-local");
 const flash = require("connect-flash");
 
+const profileRouters = require("./routes/profile.js");
 const listingRoutes = require("./routes/listing.js");
 const reviewRoutes = require("./routes/review.js");
 const userRouters = require("./routes/user.js");
@@ -74,6 +75,7 @@ passport.use(
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use("/profile", profileRouters);
 app.use("/listing", listingRoutes);
 app.use("/listing/:id/review", reviewRoutes);
 app.use("/", userRouters);
@@ -93,7 +95,6 @@ app.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     return res.status(400).send(message);
   }
-  console.log(message);
   res
     .status(status)
     .render("listing/error.ejs", { status, message, file: "error" });

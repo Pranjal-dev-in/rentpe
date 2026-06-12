@@ -11,14 +11,6 @@ const { storage } = require("../CloudConfig.js");
 const upload = multer({ storage });
 const axios = require("axios");
 
-// My listing Route
-router.get("/mylisting", isLoggedIn, async (req, res) => {
-  let allListing = await Listing.find({
-    owner: res.locals.currUser._id,
-  });
-  res.render("listing/myListing.ejs", { allListing });
-});
-
 // Delete route
 router.delete(
   "/:id",

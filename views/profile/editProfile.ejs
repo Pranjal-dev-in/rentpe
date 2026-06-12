@@ -1,0 +1,967 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<body>
+  <!-- PAGE -->
+  <div class="settings-page">
+    <!-- heading -->
+    <div class="page-heading">
+      <div class="page-eyebrow">
+        <div class="eyebrow-dot"></div>
+        Account
+      </div>
+      <h1 class="page-title">
+        Settings <span class="acc">&amp; Privacy</span>
+      </h1>
+      <p class="page-sub">
+        Manage your profile, account security, and preferences.
+      </p>
+    </div>
+
+    <!-- mobile tabs -->
+    <div class="mob-tabs" id="mobTabs">
+      <button
+        class="mob-tab active"
+        onclick="switchPanel('edit-profile', this)"
+      >
+        ✏️ Edit Profile
+      </button>
+      <button class="mob-tab" onclick="switchPanel('change-name', this)">
+        👤 Username
+      </button>
+      <button class="mob-tab" onclick="switchPanel('profile-photo', this)">
+        📸 Photo
+      </button>
+      <button class="mob-tab" onclick="switchPanel('change-email', this)">
+        📧 Email
+      </button>
+      <button class="mob-tab" onclick="switchPanel('change-password', this)">
+        🔒 Password
+      </button>
+      <button class="mob-tab" onclick="switchPanel('danger-zone', this)">
+        🗑️ Delete
+      </button>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sb-user">
+        <div class="sb-av" id="sbAvatar">
+          <%=user.name.slice(0,1).toUpperCase()%>
+        </div>
+        <div>
+          <div class="sb-name" id="sbName"><%=user.name%></div>
+          <div class="sb-email"><%=user.email%></div>
+        </div>
+      </div>
+
+      <div class="sb-group">
+        <div class="sb-label">Profile</div>
+        <button
+          class="sb-item active"
+          data-panel="edit-profile"
+          onclick="switchPanel('edit-profile', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+            />
+            <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z" />
+          </svg>
+          Edit Profile
+        </button>
+
+        <button
+          class="sb-item"
+          data-panel="change-name"
+          onclick="switchPanel('change-name', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Change Username
+        </button>
+
+        <button
+          class="sb-item"
+          data-panel="profile-photo"
+          onclick="switchPanel('profile-photo', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+            />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
+          Profile Photo
+        </button>
+      
+    </div>
+
+      <div class="sb-group">
+        <div class="sb-label">Account</div>
+        <button
+          class="sb-item"
+          data-panel="change-email"
+          onclick="switchPanel('change-email', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+          Change Email
+        </button>
+
+        <button
+          class="sb-item"
+          data-panel="change-password"
+          onclick="switchPanel('change-password', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          Change Password
+        </button>
+      </div>
+
+      <div class="sb-group">
+        <div class="sb-label">Danger Zone</div>
+        <button
+          class="sb-item danger"
+          data-panel="danger-zone"
+          onclick="switchPanel('danger-zone', this)"
+        >
+          <svg
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          </svg>
+          Delete Account
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <!-- EDIT PROFILE -->
+      <div class="panel active" id="panel-edit-profile">
+        <div class="panel-head">
+          <div class="ph-icon">✏️</div>
+          <div>
+            <div class="ph-title">Edit Profile</div>
+            <div class="ph-sub">Update your public profile information.</div>
+          </div>
+        </div>
+
+        <form action="/profile/<%=user._id%>/detail?_method=PATCH" method="post">
+          <div class="card">
+            <div class="ff-2col">
+              <div class="ff" id="ff-ep-fn">
+                <label class="ff-label"
+                  >First name <span class="ctag">edited</span></label
+                >
+                <div class="ff-row">
+                  <svg
+                    class="ffi"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" /></svg
+                  ><input
+                    class="ffi-n"
+                    type="text"
+                    value="<%=user.name.split(" ")[0]%>"
+                    oninput="mc(this.closest('.ff'))"
+                    name="fName"
+                  />
+                </div>
+              </div>
+              <div class="ff" id="ff-ep-ln">
+                <label class="ff-label"
+                  >Last name <span class="ctag">edited</span></label
+                >
+                <div class="ff-row">
+                  <svg
+                    class="ffi"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" /></svg
+                  ><input
+                    class="ffi-n"
+                    type="text"
+                    value="<%=user.name.split(" ")[1]%>"
+                    oninput="mc(this.closest('.ff'))"
+                    name="lName"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="ff" style="margin-top: 16px">
+              <label class="ff-label"
+                >Bio <span class="ctag">edited</span></label
+              >
+              <textarea
+                class="ffi-ta"
+                id="ep-bio"
+                maxlength="200"
+                oninput="
+                  mc(this.closest('.ff'));
+                  bioLen(this, 'ep-bio-len');
+                "
+                placeholder="Enter a bio"
+                name="bio"
+              ><%if(user.bio){%><%=user.bio%><%}else{%><%}%></textarea>
+              <div class="ff-hint"><span id="ep-bio-len">0</span>/200</div>
+            </div>
+            <div class="ff" style="margin-top: 16px">
+              <label class="ff-label"
+                >Location <span class="ctag">edited</span></label
+              >
+              <div class="ff-row">
+                <svg
+                  class="ffi"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" /></svg
+                ><input
+                  class="ffi-n"
+                  type="text"
+                  value="<%if(user.location){%><%=user.location%><%}else{%><%}%>"
+                  placeholder="Enter Your Location"
+                  oninput="mc(this.closest('.ff'))"
+                  name="location"
+                />
+              </div>
+            </div>
+            <div class="ff" style="margin-top: 16px">
+              <label class="ff-label"
+                >Phone <span class="ctag">edited</span></label
+              >
+              <div class="ff-row">
+                <svg
+                  class="ffi"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21.73 16z"
+                  /></svg
+                ><input
+                  class="ffi-n"
+                  type="tel"
+                  placeholder="Enter Your Number"
+                  value="<%if(user.phone){%><%=user.phone%><%}else{%><%}%>"
+                  oninput="mc(this.closest('.ff'))"
+                  name="phone"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="save-bar">
+            <div class="sb-info">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" /></svg
+              >Gold fields have changed.
+            </div>
+            <div class="sb-btns">
+              <a href="/profile/<%=user._id%>" class="btn-discard">
+                Discard
+              </a>
+              <button class="btn-save" onclick="save(this, 'edit-profile')">
+                <svg
+                  width="13"
+                  height="13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline points="20 6 9 17 4 12" /></svg
+                ><span>Save Changes</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- CHANGE USERNAME -->
+      <div class="panel" id="panel-change-name">
+        <form action="/profile/<%=user._id%>/username?_method=PATCH" method="post">
+        <div class="panel-head">
+          <div class="ph-icon">👤</div>
+          <div>
+            <div class="ph-title">Change Username</div>
+            <div class="ph-sub">
+              Update your display Username shown on listings and reviews.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ff">
+            <label class="ff-label"
+              >Username / handle <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" /></svg
+              ><input
+                class="ffi-n"
+                type="text"
+                name="username"
+                value="<%if(user.username){%><%=user.username%><%}else{%><%}%>"
+                oninput="mc(this.closest('.ff'))"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="save-bar">
+          <div class="sb-info">
+            <svg
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" /></svg
+            >Username visible to all guests.
+          </div>
+          <div class="sb-btns">
+            <a href="/profile/<%=user._id%>" class="btn-discard" >
+              Discard
+            </a>
+            <button class="btn-save" onclick="save(this, 'change-name')">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <polyline points="20 6 9 17 4 12" /></svg
+              ><span>Update Username</span>
+            </button>
+          </div>
+        </div>
+        </form>
+      </div>
+
+      <!-- PROFILE PHOTO -->
+      <div class="panel" id="panel-profile-photo">
+        <div class="panel-head">
+          <div class="ph-icon">📸</div>
+          <div>
+            <div class="ph-title">Profile Photo</div>
+            <div class="ph-sub">
+              Your photo appears on your profile, listings, and reviews.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="av-row">
+            <div
+              class="av-thumb"
+              id="avThumb"
+              onclick="document.getElementById('avFile').click()"
+            ><%=user.name.slice(0,1).toUpperCase()%><div class="av-over">
+                <svg
+                  width="22"
+                  height="22"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                  />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+              </div>
+            </div>
+            <input
+              type="file"
+              id="avFile"
+              accept="image/*"
+              style="display: none"
+              onchange="prevAv(this)"
+            />
+            <div>
+              <div class="av-name"><%=user.name%></div>
+              <div class="av-hint">
+                JPG, PNG or WEBP · Max 5 MB · Square works best.
+              </div>
+              <div class="av-btns">
+                <button
+                  class="btn-upload"
+                  onclick="document.getElementById('avFile').click()"
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  Upload photo
+                </button>
+                <button class="btn-remove" onclick="rmAv()">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHANGE EMAIL -->
+      <div class="panel" id="panel-change-email">
+        <form action="/profile/<%=user._id%>?_method=PUT" method="post">
+
+        <div class="panel-head">
+          <div class="ph-icon">📧</div>
+          <div>
+            <div class="ph-title">Change Email</div>
+            <div class="ph-sub">
+              Update the email address linked to your account.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ff">
+            <label class="ff-label">Current email</label>
+            <div class="ff-row" style="background: var(--cream)">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg
+              ><input
+                class="ffi-n"
+                type="email"
+                value="<%=user.email%>"
+                disabled
+                style="color: var(--ink-soft)"
+              />
+            </div>
+          </div>
+          <div class="ff" style="margin-top: 16px">
+            <label class="ff-label"
+              >New email address <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg
+              ><input
+                class="ffi-n"
+                type="email"
+                name="email"
+                placeholder="your@newemail.com"
+                oninput="mc(this.closest('.ff'))"
+              />
+            </div>
+          </div>
+          <div class="ff" style="margin-top: 16px">
+            <label class="ff-label"
+              >Confirm with current password
+              <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+              ><input
+                class="ffi-n with-eye"
+                type="password"
+                id="ce-pw"
+                name="password"
+                placeholder="Enter your password"
+                oninput="mc(this.closest('.ff'))"
+              /><button
+                type="button"
+                class="pw-eye"
+                onclick="tpw('ce-pw', this)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="save-bar">
+          <div class="sb-info">
+            <svg
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+              <!-- A verification link will be sent. -->
+          </div>
+          <div class="sb-btns">
+            <a class="btn-discard" href="/profile/<%=user._id%>">
+              Discard
+            </a>
+            <button class="btn-save" onclick="save(this, 'change-email')">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <polyline points="20 6 9 17 4 12" /></svg
+              ><span>Update Email</span>
+            </button>
+          </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- CHANGE PASSWORD -->
+      <div class="panel" id="panel-change-password">
+        <form action="/profile/<%=user._id%>?_method=PUT" method="post">
+
+        <div class="panel-head">
+          <div class="ph-icon">🔒</div>
+          <div>
+            <div class="ph-title">Change Password</div>
+            <div class="ph-sub">
+              Use a strong password with at least 8 characters.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ff">
+            <label class="ff-label"
+              >Current password <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+              ><input
+                class="ffi-n with-eye"
+                type="password"
+                name="currentPassword"
+                id="cp-cur"
+                placeholder="Current password"
+                oninput="mc(this.closest('.ff'))"
+              /><button
+                type="button"
+                class="pw-eye"
+                onclick="tpw('cp-cur', this)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="ff" style="margin-top: 16px">
+            <label class="ff-label"
+              >New password <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+              ><input
+                class="ffi-n with-eye"
+                type="password"
+                id="cp-new"
+                name="newPassword"
+                placeholder="Min. 8 characters"
+                oninput="
+                  mc(this.closest('.ff'));
+                  strCheck(this.value);
+                "
+              /><button
+                type="button"
+                class="pw-eye"
+                onclick="tpw('cp-new', this)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <div class="str-wrap">
+              <div class="str-track">
+                <div class="str-fill" id="strFill"></div>
+              </div>
+              <div class="str-label" id="strLabel"></div>
+            </div>
+          </div>
+          <div class="ff" style="margin-top: 16px">
+            <label class="ff-label"
+              >Confirm new password <span class="ctag">edited</span></label
+            >
+            <div class="ff-row">
+              <svg
+                class="ffi"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg
+              ><input
+                class="ffi-n with-eye"
+                type="password"
+                id="cp-conf"
+                name="confirmPassword"
+                placeholder="Re-enter new password"
+                oninput="mc(this.closest('.ff'))"
+              /><button
+                type="button"
+                class="pw-eye"
+                onclick="tpw('cp-conf', this)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="save-bar">
+          <div class="sb-info">
+            <svg
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+              <!-- You will be logged out after update. -->
+          </div>
+          <div class="sb-btns">
+            <a href="/profile/<%=user._id%>" class="btn-discard">
+              Discard
+            </a>
+            <button class="btn-save" onclick="save(this, 'change-password')">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <polyline points="20 6 9 17 4 12" /></svg
+              ><span>Update Password</span>
+            </button>
+          </div>
+        </form>
+        </div>
+      </div>
+
+      <!-- DANGER ZONE -->
+      <div class="panel" id="panel-danger-zone">
+        <div class="panel-head red-head">
+          <div class="ph-icon red-icon">⚠️</div>
+          <div>
+            <div class="ph-title red-title">Danger Zone</div>
+            <div class="ph-sub">
+              These actions are permanent and cannot be undone.
+            </div>
+          </div>
+        </div>
+        <div class="dz-card">
+          <div class="dz-row">
+            <div>
+              <div class="dz-title">Deactivate account</div>
+              <div class="dz-desc">
+                Temporarily hide your profile and listings. Reactivate anytime
+                by logging back in.
+              </div>
+            </div>
+            <button
+              class="btn-dz"
+              onclick="
+                toast('Account deactivated.');
+                setTimeout(() => (location.href = 'index.html'), 2000);
+              "
+            >
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="10" y1="15" x2="10" y2="9" />
+                <line x1="14" y1="15" x2="14" y2="9" />
+              </svg>
+              Deactivate
+            </button>
+          </div>
+          <div class="dz-row">
+            <div>
+              <div class="dz-title">Delete all listings</div>
+              <div class="dz-desc">
+                Permanently remove all your property listings and their reviews.
+                Your account stays active.
+              </div>
+            </div>
+            <button class="btn-dz" onclick="openModal('del-listings')">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              </svg>
+              Delete listings
+            </button>
+          </div>
+          <div class="dz-row last">
+            <div>
+              <div class="dz-title">Delete account permanently</div>
+              <div class="dz-desc">
+                Permanently delete your account, all listings, messages, and
+                reviews. This cannot be undone.
+              </div>
+            </div>
+            <button class="btn-dz" onclick="openModal('del-account')">
+              <svg
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+              </svg>
+              Delete account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /content -->
+  </div>
+  <!-- /settings-page -->
+
+  <!-- modals -->
+  <div class="modal-bg" id="modal-del-listings">
+    <div class="modal-box">
+      <div class="m-ico">🗑️</div>
+      <h2 class="m-ttl">Delete All Listings?</h2>
+      <p class="m-dsc">
+        This will permanently remove all your listings and their reviews. Your
+        account stays active.
+      </p>
+      <div class="m-btns">
+        <button class="btn-mc" onclick="closeModal('del-listings')">
+          Cancel</button
+        ><button class="btn-md" onclick="confirmAction('del-listings')">
+          Delete All
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-bg" id="modal-del-account">
+    <div class="modal-box">
+      <div class="m-ico">⚠️</div>
+      <h2 class="m-ttl">Delete Account?</h2>
+      <p class="m-dsc">
+        This will permanently remove your profile, all listings, reviews, and
+        messages.
+      </p>
+      <div class="m-note">Ankita Sahu · ankita@rentpe.in</div>
+      <div class="m-btns">
+        <button class="btn-mc" onclick="closeModal('del-account')">
+          Cancel</button
+        ><button class="btn-md" onclick="confirmAction('del-account')">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-el" id="toastEl"></div>
+</body>

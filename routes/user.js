@@ -5,6 +5,7 @@ const passport = require("passport");
 const User = require("../models/user.js");
 const { saveRedirectUrl } = require("../middleware.js");
 
+// SignUp Route
 router.get("/signup", (req, res) => {
   res.render("user/signup.ejs", { file: "form" });
 });
@@ -33,6 +34,7 @@ router.post(
   }),
 );
 
+//Login Route
 router.get("/login", (req, res) => {
   res.render("user/login.ejs", { file: "form" });
 });
@@ -55,6 +57,7 @@ router.post(
   }),
 );
 
+//Logout Route
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {

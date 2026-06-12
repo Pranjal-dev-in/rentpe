@@ -1,0 +1,329 @@
+<% layout("layout/boilerplate.ejs") %>
+
+<body>
+  <!-- ════════════════════════════════════════
+     PROFILE HERO  (dark band)
+════════════════════════════════════════ -->
+  <div class="profile-hero">
+    <div class="hero-inner">
+      <!-- top: avatar · identity · actions -->
+      <div class="hero-top">
+        <div class="hero-avatar" id="heroAvatar"><%=user.name.slice(0,1)%></div>
+
+        <div class="hero-identity">
+          <div class="hero-name" id="heroName"><%=user.name%></div>
+          <div class="hero-handle"><%if(user.username){%>@<%=user.username%> &nbsp;<%}else{%>Not Mentioned &nbsp;<%}%><%if(user.location){%>·&nbsp; <%=user.location%><%}else{%><%}%></div>
+          <div class="hero-badges">
+            <%if(listings.lenght>5){%>
+                <span class="hero-badge">⚡ Superhost</span>
+            <%}%>
+            <span class="hero-badge">✅ Verified</span>
+            <span class="hero-badge">🏆 Top Rated</span>
+            <span class="hero-badge">⭐ 4.9 Avg</span>
+          </div>
+        </div>
+
+        <!-- actions: follow · message · 3-dot -->
+        <div class="hero-actions">
+          <button class="btn-follow" id="followBtn" style="cursor: not-allowed;" title="Coming Soon">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" y1="8" x2="19" y2="14" />
+              <line x1="22" y1="11" x2="16" y2="11" />
+            </svg>
+            Follow
+          </button>
+
+          <a href="#" class="btn-msg" style="cursor: not-allowed;" title="Coming Soon">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            Message
+          </a>
+
+          <!-- single 3-dot with all options -->
+          <div style="position: relative">
+            <button
+              class="btn-kdot"
+              id="menuBtn"
+              onclick="toggleMenu()"
+              title="More options"
+            >
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="5" r="1.5" />
+                <circle cx="12" cy="12" r="1.5" />
+                <circle cx="12" cy="19" r="1.5" />
+              </svg>
+            </button>
+            <div class="dropdown" id="mainMenu">
+              <%if(currUser._id.equals(user._id)){%>
+              <a class="dd-item" href="/profile/<%=user._id%>/edit%>">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  />
+                  <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z" />
+                </svg>
+                Edit profile
+              </a>
+              <div class="dd-sep"></div>
+              <%}%>
+              <button class="dd-item" onclick="dd('copy')">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                  />
+                  <path
+                    d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                  />
+                </svg>
+                Copy profile link
+              </button>
+              <button class="dd-item" onclick="dd('share')">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+                Share profile
+              </button>
+              <%if(currUser._id.equals(user._id)){%>
+              <div class="dd-sep"></div>
+              <a class="dd-item" href="/logout">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="16" 
+                  height="16" 
+                  fill="currentColor" 
+                  class="bi bi-box-arrow-right" 
+                  viewBox="0 0 16 16"
+                >
+                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+                Logout
+              </a>
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- stats counts strip -->
+      <div class="stats-band">
+        <div class="stat-pill">
+          <span class="stat-n" id="statL"><%=listings.length%></span>
+          <span class="stat-l">Listings</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-n" id="statF">124</span>
+          <span class="stat-l">Followers</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-n">37</span>
+          <span class="stat-l">Following</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /profile-hero -->
+
+  <!-- ════════════════════════════════════════
+     BODY
+════════════════════════════════════════ -->
+  <div class="profile-body">
+    <!-- info cards -->
+    <div class="info-row">
+      <div class="info-card">
+        <div class="info-card-title">About</div>
+        <p class="info-bio"><%if(user.bio){%><%=user.bio%><%}else{%>Not Mentioned<%}%></p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Details</div>
+        <div class="info-list">
+          <div class="info-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg><%if(user.location){%><%=user.location%><%}else{%>Not Mentioned<%}%></div>
+          <div class="info-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <rect x="2" y="4" width="20" height="16" rx="2" />
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+            </svg><%if(user.email){%><%=user.email%><%}else{%>Not Mentioned<%}%></div>
+          <div class="info-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Member since <strong><%=joinTime%></strong>
+          </div>
+          <div class="info-item">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.72a16 16 0 0 0 6 6l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"
+              />
+            </svg>
+            <%if(user.phone){%>+91 <%=user.phone%> &nbsp;·&nbsp; Replies in <strong>&lt; 1hr</strong><%}else{%>Not Mentioned<%}%>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- listings -->
+    <div class="listings-head">
+      <div class="listings-title">All Listings</div>
+      <%if(currUser._id.equals(user._id)){%>
+      <a href="/listing/new" class="btn-new-listing">
+        <svg
+          width="13"
+          height="13"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Add listing
+      </a>
+      <%}%>
+    </div>
+    <%if(listings.length>0){%>
+    <div class="lc-grid" id="lcGrid">
+        <%for(listing of listings){%>
+        <div class="lc">
+            <div class="lc-img">
+                <img src="<%=listing.image[0].url%>" alt="<%=listing.image[0].filename%>" loading="lazy" />
+                <div class="lc-price">₹ <%= Number(listing.price).toLocaleString("en-IN") %> / night</div>
+                <button class="lc-save" onclick="saveListing(this,event)" title="Save">♡</button>
+            </div>
+            <div class="lc-body">
+                <div class="lc-name"><%=listing.title%></div>
+                <div class="lc-loc">📍 <%=listing.location%>, <%=listing.city%></div>
+                <div class="lc-foot">
+                    <div class="lc-rating">
+                        <%if(listing.reviews.length>0) {%>
+                            <span class="gold-star">★</span> <%=(listing.reviews.reduce((sum, item) => sum + item.rating, 0)/listing.reviews.length).toFixed(1)%> · Superhost
+                        <%}else{%>
+                            <div class="new-badge">
+                                <p>new</p>
+                            </div>  
+                        <%}%>
+                    </div>
+                     
+                    <a href="/listing/<%=listing._id%>" class="lc-btn">View</a>
+                </div>
+            </div>
+        </div>
+        <%}%>
+    </div>
+    <%}else{%>
+        <div class="no-listing">
+            <div class="no-listing-img">
+                <img src="https://res.cloudinary.com/dhs0mgthd/image/upload/v1781013776/glwduosaxx7efbuea2sp.svg" alt="Logo">
+            </div>
+            <p>No Listing Yet</p>
+        </div>
+    <%}%>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ── 3-DOT MENU ── */
+    function toggleMenu() {
+      document.getElementById("mainMenu").classList.toggle("open");
+    }
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest("#menuBtn") && !e.target.closest("#mainMenu")) {
+        document.getElementById("mainMenu").classList.remove("open");
+      }
+    });
+
+    /* ── TOAST ── */
+    function toast(msg, dur = 2600) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.classList.remove("show"), dur);
+    }
+  </script>
+</body>
